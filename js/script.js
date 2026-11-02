@@ -1377,6 +1377,12 @@ function toggleTheme() {
 }
 
 function init() {
+  pendo.initialize({
+    visitor: {
+      id: ''
+    }
+  });
+
   applyTheme(loadTheme());
   document.getElementById('footerYear').textContent = new Date().getFullYear();
   transactions = loadTransactions();
