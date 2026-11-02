@@ -1102,6 +1102,16 @@ function addTransaction() {
   transactions.push(newTransaction);
   saveTransactions();
   console.log('New transaction saved');
+
+  // Pendo Track Event: fires when a new transaction is successfully added
+  if (typeof pendo !== 'undefined') {
+    pendo.track('transaction_added', {
+      transaction_type: newTransaction.type,
+      amount: newTransaction.amount,
+      category: newTransaction.category,
+      has_description: newTransaction.description !== ''
+    });
+  }
 }
 
 function findTransactionIndex(id) {
@@ -1130,6 +1140,16 @@ function updateTransaction() {
 
   saveTransactions();
   console.log('Transaction updated');
+
+  // Pendo Track Event: fires when an existing transaction is successfully updated
+  if (typeof pendo !== 'undefined') {
+    pendo.track('transaction_updated', {
+      transaction_type: transactions[index].type,
+      amount: transactions[index].amount,
+      category: transactions[index].category,
+      has_description: transactions[index].description !== ''
+    });
+  }
 }
 
 function startEdit(id) {
@@ -1197,9 +1217,21 @@ function deleteTransaction(id) {
     return;
   }
 
+  const deleted = transactions[index];
+
   transactions.splice(index, 1);
   saveTransactions();
   console.log('Transaction deleted');
+
+  // Pendo Track Event: fires when a transaction is successfully deleted
+  if (typeof pendo !== 'undefined') {
+    pendo.track('transaction_deleted', {
+      transaction_type: deleted.type,
+      amount: deleted.amount,
+      category: deleted.category,
+      has_description: deleted.description !== ''
+    });
+  }
 
   if (editingId === id) {
     stopEditing();
