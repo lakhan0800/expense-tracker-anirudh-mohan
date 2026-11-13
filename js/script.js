@@ -1376,7 +1376,18 @@ function toggleTheme() {
   }
 }
 
+// Starts Pendo once when the page loads. The app has no sign in, so every visitor
+// is anonymous and Pendo reuses the id it saved in the browser on an earlier visit.
+function initPendo() {
+  pendo.initialize({
+    visitor: {
+      id: ''
+    }
+  });
+}
+
 function init() {
+  initPendo();
   applyTheme(loadTheme());
   document.getElementById('footerYear').textContent = new Date().getFullYear();
   transactions = loadTransactions();
